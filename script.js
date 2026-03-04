@@ -54,11 +54,11 @@ function playArtwork(i) {
 
         art.style.transition = "none";
         art.style.backgroundImage = `url(${piece.file})`;
-        art.style.transform =
-            `translate(${piece.zoomStart.x}%, ${piece.zoomStart.y}%)
-             scale(${piece.zoomStart.scale})`;
 
+        /* ALWAYS START CENTERED */
+        art.style.transform = "scale(1)";
         art.style.opacity = 0;
+
         title.style.opacity = 0;
 
         art.offsetHeight;
@@ -72,7 +72,7 @@ function playArtwork(i) {
             showTitle(piece.title);
         }, 3000));
 
-        /* zoom */
+        /* zoom (CENTERED) */
         timers.push(setTimeout(() => {
 
             if (session !== playSession) return;
@@ -81,8 +81,7 @@ function playArtwork(i) {
                 `transform ${piece.duration}s ease-in-out`;
 
             art.style.transform =
-                `translate(${piece.zoomEnd.x}%, ${piece.zoomEnd.y}%)
-                 scale(${piece.zoomEnd.scale})`;
+                `scale(${piece.zoomEnd.scale})`;
 
         }, 3000));
 
