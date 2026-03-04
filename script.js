@@ -5,7 +5,7 @@ const art = document.getElementById("art");
 const title = document.getElementById("title");
 
 let timers = [];
-let playSession = 0;   // prevents mismatch
+let playSession = 0;
 
 /* clear timers */
 function clearTimers() {
@@ -40,7 +40,7 @@ function playArtwork(i) {
 
     clearTimers();
 
-    playSession++;              // NEW SESSION
+    playSession++;
     const session = playSession;
 
     const piece = artworks[i];
@@ -50,14 +50,15 @@ function playArtwork(i) {
 
     img.onload = () => {
 
-        /* ignore outdated loads */
         if (session !== playSession) return;
 
         art.style.transition = "none";
         art.style.backgroundImage = `url(${piece.file})`;
-        art.style.transform = "scale(1)";
-        art.style.opacity = 0;
+        art.style.transform =
+            `translate(${piece.zoomStart.x}%, ${piece.zoomStart.y}%)
+             scale(${piece.zoomStart.scale})`;
 
+        art.style.opacity = 0;
         title.style.opacity = 0;
 
         art.offsetHeight;
@@ -73,21 +74,23 @@ function playArtwork(i) {
 
         /* zoom */
         timers.push(setTimeout(() => {
+
             if (session !== playSession) return;
 
             art.style.transition =
                 `transform ${piece.duration}s ease-in-out`;
 
             art.style.transform =
-                `scale(${piece.zoomEnd.scale})`;
+                `translate(${piece.zoomEnd.x}%, ${piece.zoomEnd.y}%)
+                 scale(${piece.zoomEnd.scale})`;
 
-        }, 3500));
+        }, 3000));
 
         /* next artwork */
         timers.push(setTimeout(() => {
             if (session !== playSession) return;
             fadeOutAndNext();
-        }, piece.duration * 1000 + 3500));
+        }, (piece.duration + 6) * 1000));
     };
 
     img.onerror = () => {
@@ -104,7 +107,7 @@ function showTitle(text) {
 
     timers.push(setTimeout(() => {
         title.style.opacity = 0;
-    }, 10000));
+    }, 7000));
 }
 
 /* next */
